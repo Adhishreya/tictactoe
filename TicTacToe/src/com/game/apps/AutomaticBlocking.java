@@ -24,52 +24,62 @@ public class AutomaticBlocking {
 
 	boolean currentMove(char currentPlayer, int tempRow, int tempColumn) {
 		for (int i = 0; i < 3; i++) {
-//			if (board[i][tempColumn] != currentPlayer)
-//				break;
 			System.out.println("count = " + count);
 			if (board[i][tempColumn] == currentPlayer) {
 				count++;
 			}
 			if (count == 2) {
-				// for row
-				possibleMake = new int[] { 1, 0, 0 };
-				return true;
+				for (int j = 0; j < 3; j++) {
+					if (board[i][tempColumn] == '-') {
+						board[i][tempColumn] = player2;
+						return true;
+					}
+				}
 			}
-//			if (count == 3)
-//				return true;
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
-//			if (board[i][tempRow] != currentPlayer)
-//				break;
 			if (board[tempRow][i] == currentPlayer) {
 				count++;
 			}
 			if (count == 2) {
-				// for column
-				possibleMake = new int[] { 0, 1, 0 };
-				return true;
+				for (int j = 0; j < 3; j++) {
+					if (board[tempRow][j] == '-') {
+						board[tempRow][j] = player2;
+						return true;
+					}
+				}
 			}
-//			if (count == 3)
-//				return true;
 
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
-//			if (board[i][i] != currentPlayer)
-//				break;
 			if (board[i][i] == currentPlayer) {
 				count++;
-
 			}
 			if (count == 2) {
-				// for diagonal
-				possibleMake = new int[] { 0, 0, 1 };
-				return true;
+				for (int j = 0; j < 3; j++) {
+					if (board[j][j] == '-') {
+						board[j][j] = player2;
+						return true;
+					}
+				}
 			}
-//			if (count == 3)
-//				return true;
+		}
+		count = 0;
 
+		for (int i = 0; i < 3; i++) {
+			if (board[2 - i][i] == currentPlayer) {
+				count++;
+			}
+			if (count == 2) {
+				for (int j = 0; j < 3; j++) {
+					if (board[2 - j][j] == '-') {
+						board[2 - j][j] = player2;
+						return true;
+					}
+				}
+			}
 		}
 		count = 0;
 		return false;
@@ -104,7 +114,6 @@ public class AutomaticBlocking {
 				break;
 			if (board[i][i] == currentPlayer) {
 				count++;
-
 			}
 			if (count == 3)
 				return true;
@@ -114,35 +123,10 @@ public class AutomaticBlocking {
 		return false;
 	}
 
-	void blocking(char aiPlayer, int tempRow, int tempColumn) {
-
-		// checking oponent's move and possible chances of blocking the opponent
-//		boolean possible = 
-		currentMove(player1, tempRow, tempColumn);
-		System.out.println("possible = " + possibleMake[0] + " " + possibleMake[1] + " " + possibleMake[2]);
-		if (possibleMake[2] == 1) {
-			if (tempColumn + 1 < 3 && tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn + 1))
-				board[tempRow + 1][tempColumn + 1] = player2;
-			else if (tempColumn - 1 >= 0 && tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn - 1))
-				board[tempRow - 1][tempColumn - 1] = player2;
+	void blocking(int tempRow, int tempColumn) {
+		boolean possible = currentMove(player1, tempRow, tempColumn);
+		if (possible == true)
 			return;
-		} else if (possibleMake[1] == 1) {
-			if (tempColumn + 1 < 3 && isAvailable(tempRow, tempColumn + 1))
-				board[tempRow][tempColumn + 1] = player2;
-			else if (tempColumn - 1 >= 0 && isAvailable(tempRow, tempColumn - 1))
-				board[tempRow][tempColumn - 1] = player2;
-			return;
-
-		} else if (possibleMake[0] == 1) {
-			if (tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn))
-				board[tempRow + 1][tempColumn] = player2;
-			else if (tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn))
-				board[tempRow - 1][tempColumn] = player2;
-			return;
-		}
-//		if (possible)
-//			System.out.println("Possible");
-
 		if (tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn))
 			board[tempRow + 1][tempColumn] = player2;
 		else if (tempColumn + 1 < 3 && isAvailable(tempRow, tempColumn + 1))
@@ -155,6 +139,16 @@ public class AutomaticBlocking {
 			board[tempRow + 1][tempColumn + 1] = player2;
 		else if (tempColumn - 1 >= 0 && tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn - 1))
 			board[tempRow - 1][tempColumn - 1] = player2;
+		else {
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					if (isAvailable(i, j)) {
+						board[i][j] = player2;
+						return;
+					}
+				}
+			}
+		}
 
 	}
 
@@ -190,7 +184,7 @@ public class AutomaticBlocking {
 			}
 			auto.totalCount++;
 			auto.board[row][column] = auto.player1;
-			auto.blocking(auto.player2, row, column);
+			auto.blocking(row, column);
 			auto.totalCount++;
 			auto.printBoard();
 			boolean gOver = auto.checkWinner(auto.board[row][column], row, column);
