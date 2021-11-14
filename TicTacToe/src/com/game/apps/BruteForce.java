@@ -19,10 +19,8 @@ public class BruteForce {
 	boolean currentMove(char currentPlayer, int tempRow, int tempColumn)
 
 	{
-		System.out.println("count = " + count);
-
-		for (int i = 0; i < tempRow; i++) {
-			if (board[i][tempRow] != currentPlayer)
+		for (int i = 0; i < 3; i++) {
+			if (board[i][tempColumn] != currentPlayer)
 				break;
 			if (board[i][tempColumn] == currentPlayer) {
 				count++;
@@ -32,7 +30,7 @@ public class BruteForce {
 				return true;
 		}
 		count = 0;
-		for (int i = 0; i < tempColumn; i++) {
+		for (int i = 0; i < 3; i++) {
 			if (board[i][tempRow] != currentPlayer)
 				break;
 			if (board[tempRow][i] == currentPlayer) {
@@ -44,8 +42,8 @@ public class BruteForce {
 
 		}
 		count = 0;
-		for (int i = 0; i < tempRow; i++) {
-			if (board[i][tempRow] != currentPlayer)
+		for (int i = 0; i < 3; i++) {
+			if (board[i][i] != currentPlayer)
 				break;
 			if (board[i][i] == currentPlayer) {
 				count++;
@@ -71,13 +69,15 @@ public class BruteForce {
 	public static void main(String[] args) {
 		BruteForce game1 = new BruteForce();
 		Scanner sc = new Scanner(System.in);
-		System.out.println("do you want to continue");
-		char cin = sc.nextLine().charAt(0);
-		int row, column;
+//		System.out.println("do you want to continue");
+//		char cin = sc.nextLine().charAt(0);
+		int row;
+		int column;
 		game1.initializeBoard();
-		while (cin != 'n') {
+//		while (cin != 'n') {
+		while (game1.totalMoves != 9) {
 			game1.totalMoves++;
-			System.out.println("Enter the option");
+			System.out.println("Enter the position");
 			row = Integer.parseInt(sc.nextLine());
 			column = Integer.parseInt(sc.nextLine());
 
@@ -86,19 +86,22 @@ public class BruteForce {
 				row = Integer.parseInt(sc.nextLine());
 				column = Integer.parseInt(sc.nextLine());
 			}
+			System.out.println("option:X or O");
 			char player = sc.nextLine().charAt(0);
 			game1.board[row][column] = player;
 			game1.printBoard();
 			boolean gOver = game1.currentMove(game1.board[row][column], row, column);
-			if (gOver == true)
+			if (gOver == true) {
 				System.out.println("Game Over !!" + game1.board[row][column] + " Won the match");
+				break;
+				}
 			else if (game1.totalMoves == 9) {
 				System.out.println("Game Tied");
 				break;
 			} else
 				System.out.println("Game continuing");
-			System.out.println("do you want to continue");
-			cin = sc.nextLine().charAt(0);
+//			System.out.println("do you want to continue");
+//			cin = sc.nextLine().charAt(0);
 		}
 	}
 }
