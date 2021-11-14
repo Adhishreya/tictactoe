@@ -6,6 +6,7 @@ public class AutomaticBlocking {
 	int count = 0;
 	final char board[][] = new char[3][3];
 	char player1, player2;
+	int possibleMake[] = new int[] { 0, 0, 0 };
 	int totalCount = 0;
 
 	public void initializeBoard() {
@@ -25,13 +26,16 @@ public class AutomaticBlocking {
 		for (int i = 0; i < 3; i++) {
 //			if (board[i][tempColumn] != currentPlayer)
 //				break;
+			System.out.println("count = " + count);
 			if (board[i][tempColumn] == currentPlayer) {
 				count++;
-
 			}
-			if (count == 3)
+			if (count == 2) {
+				// for row
+				possibleMake = new int[] { 1, 0, 0 };
 				return true;
-//			else if (count == 2)
+			}
+//			if (count == 3)
 //				return true;
 		}
 		count = 0;
@@ -40,16 +44,64 @@ public class AutomaticBlocking {
 //				break;
 			if (board[tempRow][i] == currentPlayer) {
 				count++;
-
 			}
-			if (count == 3)
+			if (count == 2) {
+				// for column
+				possibleMake = new int[] { 0, 1, 0 };
 				return true;
+			}
+//			if (count == 3)
+//				return true;
 
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
 //			if (board[i][i] != currentPlayer)
 //				break;
+			if (board[i][i] == currentPlayer) {
+				count++;
+
+			}
+			if (count == 2) {
+				// for diagonal
+				possibleMake = new int[] { 0, 0, 1 };
+				return true;
+			}
+//			if (count == 3)
+//				return true;
+
+		}
+		count = 0;
+		return false;
+	}
+
+	boolean checkWinner(char currentPlayer, int tempRow, int tempColumn)
+
+	{
+		count = 0;
+		for (int i = 0; i < 3; i++) {
+			if (board[i][tempColumn] != currentPlayer)
+				break;
+			if (board[i][tempColumn] == currentPlayer) {
+				count++;
+			}
+			if (count == 3)
+				return true;
+		}
+		count = 0;
+		for (int i = 0; i < 3; i++) {
+			if (board[i][tempRow] != currentPlayer)
+				break;
+			if (board[tempRow][i] == currentPlayer) {
+				count++;
+			}
+			if (count == 3)
+				return true;
+		}
+		count = 0;
+		for (int i = 0; i < 3; i++) {
+			if (board[i][i] != currentPlayer)
+				break;
 			if (board[i][i] == currentPlayer) {
 				count++;
 
@@ -63,8 +115,31 @@ public class AutomaticBlocking {
 	}
 
 	void blocking(char aiPlayer, int tempRow, int tempColumn) {
+
 		// checking oponent's move and possible chances of blocking the opponent
-//		boolean possible = currentMove(player1, tempRow, tempColumn);
+//		boolean possible = 
+		currentMove(player1, tempRow, tempColumn);
+		System.out.println("possible = " + possibleMake[0] + " " + possibleMake[1] + " " + possibleMake[2]);
+		if (possibleMake[2] == 1) {
+			if (tempColumn + 1 < 3 && tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn + 1))
+				board[tempRow + 1][tempColumn + 1] = player2;
+			else if (tempColumn - 1 >= 0 && tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn - 1))
+				board[tempRow - 1][tempColumn - 1] = player2;
+			return;
+		} else if (possibleMake[1] == 1) {
+			if (tempColumn + 1 < 3 && isAvailable(tempRow, tempColumn + 1))
+				board[tempRow][tempColumn + 1] = player2;
+			else if (tempColumn - 1 >= 0 && isAvailable(tempRow, tempColumn - 1))
+				board[tempRow][tempColumn - 1] = player2;
+			return;
+
+		} else if (possibleMake[0] == 1) {
+			if (tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn))
+				board[tempRow + 1][tempColumn] = player2;
+			else if (tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn))
+				board[tempRow - 1][tempColumn] = player2;
+			return;
+		}
 //		if (possible)
 //			System.out.println("Possible");
 
@@ -102,6 +177,7 @@ public class AutomaticBlocking {
 		int row;
 		int column;
 		while (auto.totalCount != 9) {
+			System.out.println("totalMoves = " + auto.totalCount);
 			System.out.println("Enter the option");
 			row = Integer.parseInt(scan.nextLine());
 			column = Integer.parseInt(scan.nextLine());
@@ -110,15 +186,17 @@ public class AutomaticBlocking {
 				System.out.println("Position already occupied! Please try again!!");
 				row = Integer.parseInt(scan.nextLine());
 				column = Integer.parseInt(scan.nextLine());
-				auto.totalCount++;
+
 			}
+			auto.totalCount++;
 			auto.board[row][column] = auto.player1;
 			auto.blocking(auto.player2, row, column);
+			auto.totalCount++;
 			auto.printBoard();
-			boolean gOver = auto.currentMove(auto.board[row][column], row, column);
+			boolean gOver = auto.checkWinner(auto.board[row][column], row, column);
 			if (gOver == true)
 				System.out.println("Game Over !!" + auto.board[row][column] + " Won the match");
-			else if (auto.totalCount == 9) {
+			else if (auto.totalCount >= 9) {
 				System.out.println("Game Tied");
 				break;
 			}
