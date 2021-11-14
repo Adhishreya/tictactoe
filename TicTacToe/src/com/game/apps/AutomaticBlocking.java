@@ -15,6 +15,12 @@ public class AutomaticBlocking {
 		}
 	}
 
+	boolean isAvailable(int tempRow, int tempColumn) {
+		if (board[tempRow][tempColumn] == '-')
+			return true;
+		return false;
+	}
+
 	boolean currentMove(char currentPlayer, int tempRow, int tempColumn) {
 		for (int i = 0; i < 3; i++) {
 //			if (board[i][tempColumn] != currentPlayer)
@@ -23,8 +29,10 @@ public class AutomaticBlocking {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
 				return true;
+//			else if (count == 2)
+//				return true;
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
@@ -34,7 +42,7 @@ public class AutomaticBlocking {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
 				return true;
 
 		}
@@ -46,7 +54,7 @@ public class AutomaticBlocking {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
 				return true;
 
 		}
@@ -56,9 +64,22 @@ public class AutomaticBlocking {
 
 	void blocking(char aiPlayer, int tempRow, int tempColumn) {
 		// checking oponent's move and possible chances of blocking the opponent
-		boolean possible = currentMove(player1, tempRow, tempColumn);
-		if (possible)
-			System.out.println("Possible");
+//		boolean possible = currentMove(player1, tempRow, tempColumn);
+//		if (possible)
+//			System.out.println("Possible");
+
+		if (tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn))
+			board[tempRow + 1][tempColumn] = player2;
+		else if (tempColumn + 1 < 3 && isAvailable(tempRow, tempColumn + 1))
+			board[tempRow][tempColumn + 1] = player2;
+		else if (tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn))
+			board[tempRow - 1][tempColumn] = player2;
+		else if (tempColumn - 1 >= 0 && isAvailable(tempRow, tempColumn - 1))
+			board[tempRow][tempColumn - 1] = player2;
+		else if (tempColumn + 1 < 3 && tempRow + 1 < 3 && isAvailable(tempRow + 1, tempColumn + 1))
+			board[tempRow + 1][tempColumn + 1] = player2;
+		else if (tempColumn - 1 >= 0 && tempRow - 1 >= 0 && isAvailable(tempRow - 1, tempColumn - 1))
+			board[tempRow - 1][tempColumn - 1] = player2;
 
 	}
 
