@@ -26,7 +26,7 @@ public class BruteForce {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
 				return true;
 		}
 		count = 0;
@@ -37,7 +37,7 @@ public class BruteForce {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
 				return true;
 
 		}
@@ -49,7 +49,20 @@ public class BruteForce {
 				count++;
 
 			}
-			if (count == 2)
+			if (count == 3)
+				return true;
+
+		}
+		count = 0;
+
+		for (int i = 0; i < 3; i++) {
+			if (board[2 - i][i] != currentPlayer)
+				break;
+			if (board[2 - i][i] == currentPlayer) {
+				count++;
+
+			}
+			if (count == 3)
 				return true;
 
 		}
@@ -94,8 +107,7 @@ public class BruteForce {
 			if (gOver == true) {
 				System.out.println("Game Over !!" + game1.board[row][column] + " Won the match");
 				break;
-				}
-			else if (game1.totalMoves == 9) {
+			} else if (game1.totalMoves == 9) {
 				System.out.println("Game Tied");
 				break;
 			} else

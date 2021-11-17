@@ -100,7 +100,7 @@ public class AutomaticBlocking {
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
-			if (board[i][tempRow] != currentPlayer)
+			if (board[tempRow][i] != currentPlayer)
 				break;
 			if (board[tempRow][i] == currentPlayer) {
 				count++;
@@ -113,6 +113,17 @@ public class AutomaticBlocking {
 			if (board[i][i] != currentPlayer)
 				break;
 			if (board[i][i] == currentPlayer) {
+				count++;
+			}
+			if (count == 3)
+				return true;
+
+		}
+		count = 0;
+		for (int i = 0; i < 3; i++) {
+			if (board[2 - i][i] != currentPlayer)
+				break;
+			if (board[2 - i][i] == currentPlayer) {
 				count++;
 			}
 			if (count == 3)
@@ -176,7 +187,7 @@ public class AutomaticBlocking {
 			row = Integer.parseInt(scan.nextLine());
 			column = Integer.parseInt(scan.nextLine());
 
-			if (auto.board[row][column] != '-') {
+			while ((auto.board[row][column] != '-')) {
 				System.out.println("Position already occupied! Please try again!!");
 				row = Integer.parseInt(scan.nextLine());
 				column = Integer.parseInt(scan.nextLine());
