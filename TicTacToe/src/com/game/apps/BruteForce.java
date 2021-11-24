@@ -82,12 +82,9 @@ public class BruteForce {
 	public static void main(String[] args) {
 		BruteForce game1 = new BruteForce();
 		Scanner sc = new Scanner(System.in);
-//		System.out.println("do you want to continue");
-//		char cin = sc.nextLine().charAt(0);
 		int row;
 		int column;
 		game1.initializeBoard();
-//		while (cin != 'n') {
 		while (game1.totalMoves != 9) {
 			game1.totalMoves++;
 			System.out.println("Enter the position");

@@ -47,12 +47,9 @@ public class RandomPicker {
 				break;
 			if (board[tempRow][i] == player) {
 				count++;
-
 			}
-//			System.out.println("count = " + count);
 			if (count == 3)
 				return true;
-
 		}
 		count = 0;
 		for (int i = 0; i < 3; i++) {
@@ -93,8 +90,6 @@ public class RandomPicker {
 	}
 
 	public static void main(String[] args) {
-//		initializeBoard();
-//		printBoard();
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Choose the option to play!\n1.X\n2.O");
 		int option = Integer.parseInt(scan.nextLine());
